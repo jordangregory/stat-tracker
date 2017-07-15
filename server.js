@@ -1,18 +1,17 @@
 const express = require("express");
 const app = express();
 const bodyParser = require("body-parser");
-const dbUrl = "mongodb://localhost:27017/statTracker";
+const dbUrl = "mongodb://localhost:27017/statistics";
 const mongoose = require("mongoose");
 mongoose.Promise = require("bluebird");
-const Activity = require("./models/Activity");
 const router = express.Router();
 const port = process.env.PORT || 7500;
 
-var users = require("./routes/activities");
+var activities = require("./routes/activities");
 
 app.use(bodyParser.json());
 app.use(bodyParser.urlencoded({ extended: false }));
-app.use("/api", Activity);
+app.use("/api", activities);
 
 mongoose
   .connect(dbUrl)
