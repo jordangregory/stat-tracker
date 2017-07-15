@@ -6,12 +6,13 @@ const mongoose = require("mongoose");
 mongoose.Promise = require("bluebird");
 const router = express.Router();
 const port = process.env.PORT || 7500;
+const checkAuth = require("./checkAuth");
 
 var activities = require("./routes/activities");
 
 app.use(bodyParser.json());
 app.use(bodyParser.urlencoded({ extended: false }));
-app.use("/api", activities);
+app.use("/api", checkAuth, activities);
 
 mongoose
   .connect(dbUrl)

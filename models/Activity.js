@@ -7,18 +7,20 @@ var activitySchema = new Schema({
     required: true
   },
 
-  stats: {
-    quantity: {
-      type: Number,
-      required: true,
-      default: 0
-    },
-    date: {
-      type: Date,
-      require: true,
-      default: Date()
+  stats: [
+    {
+      quantity: {
+        type: Number,
+        required: true,
+        default: 0
+      },
+      date: {
+        type: Date,
+        require: true,
+        default: Date()
+      }
     }
-  }
+  ]
 });
 
 module.exports = mongoose.model("Activity", activitySchema);

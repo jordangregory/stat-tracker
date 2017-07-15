@@ -58,14 +58,18 @@ router.delete("/activities/:id", function(req, res) {
     });
 });
 
-router.post("/activities/:id", function(req, res) {
-  let specifiedActivity = req.params.id - 1;
-  Activity.find()
-    .then(foundActivity => {
-      res.send(foundActivity[specifiedActivity]);
-    })
-    .catch(err => {
-      res.status(500).send(err);
-    });
+router.post("/activities/:id/stats", function(req, res) {
+  Activity.findById({ _id: req.params.id }).then(placeholderParam => {
+    placeholderParam.stats.push(req.body);
+    placeholderParam
+      .save()
+      .then(newPlaceholder => {
+        res.send(newPlaceholder);
+      })
+      .catch(err => {
+        res.status(500).send(err);
+      });
+  });
 });
+
 module.exports = router;
