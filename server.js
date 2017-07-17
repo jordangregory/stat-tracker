@@ -1,7 +1,7 @@
 const express = require("express");
 const app = express();
 const bodyParser = require("body-parser");
-const dbUrl = "mongodb://localhost:27017/statistics";
+const dbUrl = "mongodb://localhost:27017/stats";
 const mongoose = require("mongoose");
 mongoose.Promise = require("bluebird");
 const router = express.Router();

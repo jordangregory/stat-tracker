@@ -1,8 +1,6 @@
 var express = require("express");
 var router = express.Router();
 const Activity = require("../models/Activity");
-// var jwt = require("jsonwebtoken");
-// var jwtConfig = require("../jwtConfig");
 
 router.get("/activities", function(req, res) {
   Activity.find()
@@ -59,12 +57,15 @@ router.delete("/activities/:id", function(req, res) {
 });
 
 router.post("/activities/:id/stats", function(req, res) {
-  Activity.findById({ _id: req.params.id }).then(placeholderParam => {
-    placeholderParam.stats.push(req.body);
-    placeholderParam
+  Activity.findByIdAndUpdate(
+    { _id: req.params.id },
+    { $push: req.body },
+    { upsert: true }
+  ).then(updatedStat => {
+    updatedStat
       .save()
-      .then(newPlaceholder => {
-        res.send(newPlaceholder);
+      .then(newestStat => {
+        res.send(newestStat);
       })
       .catch(err => {
         res.status(500).send(err);
@@ -72,4 +73,19 @@ router.post("/activities/:id/stats", function(req, res) {
   });
 });
 
+router.delete("/stats/:id", function(req, res) {
+  Activity.findOneAndUpdate(
+    { "stats._id": req.params.id },
+    { $pull: { stats: { _id: req.params.id } } }
+  )
+    .then(row => {
+      console.log(row);
+      row.save().then(deletedRecord => {
+        res.send("Deleted Subdocument Record");
+      });
+    })
+    .catch(err => {
+      res.status(500).send(err);
+    });
+});
 module.exports = router;
